@@ -6,20 +6,28 @@
 
 color ray_color(const ray& r);
 vec3 lerp(const vec3 a, const vec3 b, const float t);
-bool hit_sphere(const point3& center, double radius, const ray& r);
+double hit_sphere(const point3& center, double radius, const ray& r);
 
-bool hit_sphere(const point3& center, double radius, const ray& r){
+double hit_sphere(const point3& center, double radius, const ray& r){
 	vec3 oc = r.origin() - center;
 	auto a = dot(r.direction(), r.direction());
 	auto b = 2.0 * dot(r.direction(), oc);
 	auto c = dot(oc, oc) - radius * radius;
 	auto discriminant = b*b - 4*a*c;
-	return (discriminant >= 0);
+
+	if(discriminant >= 0){
+		return (-b - sqrt(discriminant)) / (2.0 * a);
+	}
+	else{
+		return -1.0;
+	}
 }
 
 color ray_color(const ray& r){
-	if(hit_sphere(point3(0,0,-1), 0.5, r)){
-		return color(1.0, 0.0, 0.0);
+	auto t = hit_sphere(point3(0,0,-1), 0.5, r);
+	if(t > 0.0){
+		vec3 Normal = unit_vector(r.at(t) - point3(0,0,-1));
+		return 0.5 * (Normal + vec3(1,1,1));
 	}
 
 	vec3 unit_dir = unit_vector(r.direction());
@@ -42,7 +50,7 @@ int main()
 	image_height = (image_height < 1) ? 1 : image_height;
 
 	// Camera
-	auto focal_length = 0.5;
+	auto focal_length = 1.0f;
 	auto viewport_height = 2.0;
 	auto viewport_width = viewport_height * (static_cast<double>(image_width)/image_height);
 	auto camera_position = point3(0,0,0);
