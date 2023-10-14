@@ -7,13 +7,13 @@
 #include "sphere.h"
 
 color ray_color(const ray& r);
-vec3 lerp(const vec3 a, const vec3 b, const float t);
+vec3 lerp(const vec3 a, const vec3 b, const double t);
 
 
 
 color ray_color(const ray& r, hittable& world){
 	hit_record rec;
-	if(world.hit(r, 0, infinity, rec)){
+	if(world.hit(r, interval(0, infinity), rec)){
 		return 0.5 * (rec.normal + vec3(1,1,1));
 	}
 
@@ -22,7 +22,7 @@ color ray_color(const ray& r, hittable& world){
 	return lerp(color(1.0, 1.0, 1.0),  color(0.5, 0.7, 1.0), a);
 }
 
-vec3 lerp(const vec3 a, const vec3 b, const float t){
+vec3 lerp(const vec3 a, const vec3 b, const double t){
 	return (1-t) * a + t * b;
 }
 
@@ -41,7 +41,7 @@ int main()
 	hittable_list world;
 
 	world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
-	world.add(make_shared<sphere>(point3(0, -100, -1), 100.0));
+	world.add(make_shared<sphere>(point3(0, -100.5, -1), 100.0));
 
 	// Camera
 	auto focal_length = 1.0f;
