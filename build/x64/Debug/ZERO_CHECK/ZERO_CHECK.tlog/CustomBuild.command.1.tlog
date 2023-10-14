@@ -1,0 +1,10 @@
+^C:\USERS\JOEY\DESKTOP\VSCODE\RTINAWEEKEND\BUILD\CMAKEFILES\5BA5515F7177FC1BEE612FD0DD4F0C2D\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Joey/Desktop/VSCode/RTinAWeekend -BC:/Users/Joey/Desktop/VSCode/RTinAWeekend/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Joey/Desktop/VSCode/RTinAWeekend/build/RTWeekend.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

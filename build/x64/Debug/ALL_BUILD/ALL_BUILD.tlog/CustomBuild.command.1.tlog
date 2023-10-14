@@ -1,0 +1,10 @@
+^C:\USERS\JOEY\DESKTOP\VSCODE\RTINAWEEKEND\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Joey/Desktop/VSCode/RTinAWeekend -BC:/Users/Joey/Desktop/VSCode/RTinAWeekend/build --check-stamp-file C:/Users/Joey/Desktop/VSCode/RTinAWeekend/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
