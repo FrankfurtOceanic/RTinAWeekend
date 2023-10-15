@@ -97,4 +97,8 @@ inline vec3 unit_vector(vec3 v) {
     return v / v.length();
 }
 
+inline vec3 lerp(const vec3 a, const vec3 b, const double t){
+	return (1-t) * a + t * b;
+}
+
 #endif
