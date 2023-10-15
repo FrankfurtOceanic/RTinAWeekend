@@ -10,8 +10,9 @@
 class camera
 {
 public:
-    double aspect_ratio = 16.0 / 9.0;
-	int image_width = 400;
+    double aspect_ratio = 1.0;
+	int image_width = 100;
+    int samples_per_pixel = 10;
 
     void render(const hittable& world) {
         initialize();
@@ -21,13 +22,14 @@ public:
         for (int j = 0; j < image_height; j++) {
             std::clog << "\rScanlines remaing: " << (image_height - j) << ' ' << std::flush;
             for (int i = 0; i < image_width; i++) {
-                auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
-                auto ray_direction = pixel_center - position;
+                color pixel_color = color(0.0, 0.0, 0.0);
 
-                ray r(position, ray_direction);
-                color pixel_color = ray_color(r, world);
+                for (int k=0; k<samples_per_pixel; k++){
+                    ray r = get_ray(i,j);
+                    pixel_color += ray_color(r, world);
+                }
 
-                write_color(std::cout, pixel_color);
+                write_color(std::cout, pixel_color, samples_per_pixel);
             }
         }
 
@@ -76,6 +78,22 @@ private:
         vec3 unit_dir = unit_vector(r.direction());
         auto a = 0.5*(unit_dir.y() + 1);
         return lerp(color(1.0, 1.0, 1.0),  color(0.5, 0.7, 1.0), a);
+    }
+
+    ray get_ray(int i, int j){
+        auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
+        auto pixel_sample = pixel_center + pixel_sample_square();
+        
+        auto ray_direction = pixel_sample - position; //rays originate from the camera center
+        return ray(position, ray_direction);
+    }
+
+    vec3 pixel_sample_square() const{
+        //Return random point within the size of a pixel
+        auto px = -0.5 +random_double();
+        auto py = -0.5 +random_double();
+    
+        return pixel_delta_u * px + pixel_delta_v * py;
     }
 };
 
