@@ -47,6 +47,12 @@ class vec3{
             return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
         }
 
+        bool near_zero() const{
+            //return true if vector's component's are all close to zero
+            auto s = 1e-8;
+            return (fabs(e[0]) < s) && (fabs(e[1]) < s) && (fabs(e[2]) < s);
+        }
+
         static vec3 random() {
             return vec3(random_double(), random_double(), random_double());
         }
@@ -124,6 +130,11 @@ inline vec3 random_on_hemisphere(const vec3& normal){
         return on_unit_sphere;
     else 
         return -on_unit_sphere;
+}
+
+vec3 reflect(const vec3& v, const vec3& normal){
+    // reflects an incoming vector across the normal;
+    return v - 2*dot(v,normal)*normal;
 }
 
 inline vec3 lerp(const vec3 a, const vec3 b, const double t){

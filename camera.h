@@ -3,6 +3,7 @@
 
 #include "rtweekend.h"
 
+#include "material.h"
 #include "color.h"
 #include "hittable.h"
 #include "iostream"
@@ -76,8 +77,12 @@ private:
         hit_record rec;
 
         if(world.hit(r, interval(0.001, infinity), rec)){
-            vec3 direction = random_on_hemisphere(rec.normal);
-            return 0.5 * ray_color(ray(rec.p, direction), depth-1, world);
+            ray scattered;
+            color attenuation;
+            
+            if(rec.mat->scatter(r, rec, attenuation, scattered))
+                return attenuation * ray_color(scattered, depth-1, world);
+            return color(0.0, 0.0, 0.0);
         }
 
         vec3 unit_dir = unit_vector(r.direction());
