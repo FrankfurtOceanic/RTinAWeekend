@@ -137,6 +137,14 @@ vec3 reflect(const vec3& v, const vec3& normal){
     return v - 2*dot(v,normal)*normal;
 }
 
+vec3 refract(const vec3& v, const vec3& normal, double etai_over_etai){
+    // Refract incoming unit length vector
+    auto cos_theta = fmin(dot(-v, normal), 1.0);
+    vec3 refrated_perp = etai_over_etai * (v + cos_theta*normal);
+    vec3 refracted_para = -sqrt(fabs(1-refrated_perp.length_squared())) * normal;
+    return refracted_para + refrated_perp;
+}
+
 inline vec3 lerp(const vec3 a, const vec3 b, const double t){
 	return (1-t) * a + t * b;
 }
